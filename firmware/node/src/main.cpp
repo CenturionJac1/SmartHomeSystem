@@ -36,22 +36,27 @@ void loop() {
         }
     }
 
-    if (millis() - lastPing >= 5000) { 
-        lastPing = millis();
-         udp.beginPacket(IPAddress(255, 255, 255, 255), UDP_PORT);
-          udp.print("ping");
-           udp.endPacket();
-            Serial.println("Ping sent");
-         } // Check for responses 
-         int packetSize = udp.parsePacket();
-          if (packetSize > 0) { 
-            uint8_t incoming[256];
-             int length = udp.read(incoming, sizeof(incoming));
-              if (length > 0) { 
-                incoming[length] = '\0';
-                Serial.println(incoming);
-                } 
+    int packetSize = udp.parsePacket();
+
+    if (packetSize > 0) {
+
+        char incoming[256];
+
+        int length = udp.read(incoming, sizeof(incoming) - 1);
+
+        if (length > 0) {
+            incoming[length] = '\0';
+
+            Serial.print("Received: ");
+            Serial.println(incoming);
+            if(strcmp(incoming, "ping") == 0) {
+                udp.beginPacket(udp.remoteIP(), udp.remotePort());
+                udp.write("nodeID: ");
+                udp.write(nodeID);
+                udp.endPacket();
             }
+        }
+    }
 
     //add info processing here
 
