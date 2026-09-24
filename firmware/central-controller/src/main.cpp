@@ -1,31 +1,41 @@
 #include <WiFi.h>
-#include <WiFiUdp.h>
+#include <HTTPClient.h>
 
 const char* ssid = "YOUR_WIFI_NAME";
 const char* password = "YOUR_WIFI_PASSWORD";
 
 const int nodeID = 1;
-const int UDP_PORT = 4210;
-
-WiFiUDP udp;
 
 unsigned long lastReconnectAttempt = 0;
+unsigned long lastPing = 0;
+
+const unsigned long reconnectInterval = 5000;
+const unsigned long pingInterval = 5000;
+
+// IP addresses of nodes, filled with fake values for now
+const char* nodeIPs[] = {
+    "192.168.1.101",
+    "192.168.1.102",
+    "192.168.1.103"
+};
+
+const int numNodes = sizeof(nodeIPs) / sizeof(nodeIPs[0]);
+
 
 void setup() {
+
     Serial.begin(115200);
 
     WiFi.begin(ssid, password);
 
     Serial.println("Connecting to WiFi...");
-
-    udp.begin(UDP_PORT);
 }
 
-void loop() {
 
+void loop() {
     if (WiFi.status() != WL_CONNECTED) {
 
-        if (millis() - lastReconnectAttempt >= 5000) {
+        if (millis() - lastReconnectAttempt >= reconnectInterval) {
 
             lastReconnectAttempt = millis();
 
@@ -34,25 +44,48 @@ void loop() {
             WiFi.disconnect();
             WiFi.begin(ssid, password);
         }
-    }
 
-    if (millis() - lastPing >= 5000) { 
+        return;
+    }
+    if (millis() - lastPing >= pingInterval) {
+
         lastPing = millis();
-         udp.beginPacket(IPAddress(255, 255, 255, 255), UDP_PORT);
-          udp.print("ping");
-           udp.endPacket();
-            Serial.println("Ping sent");
-         } // Check for responses 
-         int packetSize = udp.parsePacket();
-          if (packetSize > 0) { 
-            uint8_t incoming[256];
-             int length = udp.read(incoming, sizeof(incoming));
-              if (length > 0) { 
-                incoming[length] = '\0';
-                Serial.println(incoming);
-                } 
+
+        for (int i = 0; i < numNodes; i++) {
+
+            HTTPClient http;
+
+            String url = "http://" + String(nodeIPs[i]) + "/ping";
+
+            Serial.print("Pinging node ");
+            Serial.print(i + 1);
+            Serial.print(" at ");
+            Serial.println(url);
+
+            http.begin(url);
+
+            int httpCode = http.GET();
+
+            if (httpCode > 0) {
+
+                Serial.print("HTTP response: ");
+                Serial.println(httpCode);
+
+                String response = http.getString();
+
+                Serial.print("Node response: ");
+                Serial.println(response);
+
+            } 
+            else {
+
+                Serial.print("HTTP request failed: ");
+                Serial.println(http.errorToString(httpCode));
             }
 
-    //add info processing here
+            http.end();
+        }
+    }
 
+    TODO: Add information processing here
 }

@@ -1,26 +1,37 @@
 #include <WiFi.h>
-#include <WiFiUdp.h>
+#include <WebServer.h>
 
 const char* ssid = "YOUR_WIFI_NAME";
 const char* password = "YOUR_WIFI_PASSWORD";
 
 const int nodeID = 1;
-const int UDP_PORT = 4210;
 
-WiFiUDP udp;
+// Change for each node whenever we figure out what IP addresses are safe to use.
+IPAddress nodeIP(192, 168, 1, 101);
+
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+
+WebServer server(80);
 
 unsigned long lastReconnectAttempt = 0;
+void handlePing() {
 
+    Serial.println("Received: ping");
+
+    server.send(200, "text/plain", "nodeID: " + String(nodeID));
+}
 void setup() {
     Serial.begin(115200);
-
+    if (!WiFi.config(nodeIP, gateway, subnet)) {
+        Serial.println("Failed to configure static IP");
+    }
     WiFi.begin(ssid, password);
-
     Serial.println("Connecting to WiFi...");
-
-    udp.begin(UDP_PORT);
+    server.on("/ping", handlePing);
+    server.begin();
+    Serial.println("HTTP server started");
 }
-
 void loop() {
 
     if (WiFi.status() != WL_CONNECTED) {
@@ -35,29 +46,6 @@ void loop() {
             WiFi.begin(ssid, password);
         }
     }
-
-    int packetSize = udp.parsePacket();
-
-    if (packetSize > 0) {
-
-        char incoming[256];
-
-        int length = udp.read(incoming, sizeof(incoming) - 1);
-
-        if (length > 0) {
-            incoming[length] = '\0';
-
-            Serial.print("Received: ");
-            Serial.println(incoming);
-            if(strcmp(incoming, "ping") == 0) {
-                udp.beginPacket(udp.remoteIP(), udp.remotePort());
-                udp.write("nodeID: ");
-                udp.write(nodeID);
-                udp.endPacket();
-            }
-        }
-    }
-
-    //add info processing here
-
+    server.handleClient();
+    // add info processing here
 }
