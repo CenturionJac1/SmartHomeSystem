@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,14 @@
             color: white;
             text-align: center;
             padding: 20px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+        }
+
+        header p {
+            margin-top: 0;
         }
 
         .container {
@@ -47,6 +56,7 @@
         button {
             padding: 10px 18px;
             margin-right: 8px;
+            margin-bottom: 5px;
             border: none;
             border-radius: 5px;
             background-color: #dddddd;
@@ -65,6 +75,7 @@
     </style>
 </head>
 
+
 <body>
 
 <header>
@@ -72,67 +83,88 @@
     <p>System Dashboard</p>
 </header>
 
+
 <div class="container">
 
     <!-- Smart Light -->
     <div class="device">
+
         <h2>Smart Light</h2>
 
         <div class="status">
-            Status: <span id="light-status">OFF</span>
+            Status:
+            <span id="light-status">OFF</span>
         </div>
 
-        <button onclick="setState('light', 'OFF', this)" class="active">
+        <button
+            onclick="setState('light', 'OFF', this)"
+            class="active">
             OFF
         </button>
 
-        <button onclick="setState('light', 'ON', this)">
+        <button
+            onclick="setState('light', 'ON', this)">
             ON
         </button>
 
-        <button onclick="setState('light', 'AUTO', this)">
+        <button
+            onclick="setState('light', 'AUTO', this)">
             AUTO
         </button>
+
     </div>
 
 
     <!-- Smart Outlet -->
     <div class="device">
+
         <h2>Smart Outlet</h2>
 
         <div class="status">
-            Status: <span id="outlet-status">OFF</span>
+            Status:
+            <span id="outlet-status">OFF</span>
         </div>
 
-        <button onclick="setState('outlet', 'OFF', this)" class="active">
+        <button
+            onclick="setState('outlet', 'OFF', this)"
+            class="active">
             OFF
         </button>
 
-        <button onclick="setState('outlet', 'ON', this)">
+        <button
+            onclick="setState('outlet', 'ON', this)">
             ON
         </button>
+
     </div>
 
 
     <!-- Humidifier -->
     <div class="device">
+
         <h2>Humidifier</h2>
 
         <div class="status">
-            Status: <span id="humidifier-status">OFF</span>
+            Status:
+            <span id="humidifier-status">OFF</span>
         </div>
 
-        <button onclick="setState('humidifier', 'OFF', this)" class="active">
+        <button
+            onclick="setState('humidifier', 'OFF', this)"
+            class="active">
             OFF
         </button>
 
-        <button onclick="setState('humidifier', 'LOW', this)">
+        <button
+            onclick="setState('humidifier', 'LOW', this)">
             LOW
         </button>
 
-        <button onclick="setState('humidifier', 'HIGH', this)">
+        <button
+            onclick="setState('humidifier', 'HIGH', this)">
             HIGH
         </button>
+
     </div>
 
 </div>
@@ -140,29 +172,223 @@
 
 <script>
 
-function setState(device, state, button) {
+/*
+ * Smart Home Web Interface
+ *
+ * The user interface is complete.
+ *
+ * HTTP communication with the central controller will be enabled
+ * after the central controller API and endpoints are finalized.
+ */
 
-    // Update displayed status
-    document.getElementById(device + "-status").textContent = state;
 
-    // Find the device section
-    const deviceSection = button.parentElement;
+// Base address for the central controller.
+//
+// If the webpage is hosted directly by the central ESP32,
+// this may remain empty and relative URLs can be used.
+//
+// If necessary, this can later be changed to something such as:
+//
+// const API_BASE = "http://192.168.1.100";
+//
+const API_BASE = "";
 
-    // Remove active state from all buttons in this device
-    const buttons = deviceSection.querySelectorAll("button");
 
-    buttons.forEach(function(btn) {
-        btn.classList.remove("active");
-    });
+/*
+ * Send a control command.
+ *
+ * This function provides one shared location for communication
+ * between the webpage and the central controller.
+ *
+ * Device examples:
+ *      light
+ *      outlet
+ *      humidifier
+ *
+ * Command examples:
+ *      on
+ *      off
+ *      auto
+ *      low
+ *      high
+ */
+async function sendCommand(device, state) {
 
-    // Highlight selected button
-    button.classList.add("active");
+    // Firmware commands use lowercase values.
+    const command = state.toLowerCase();
 
-    // HTTP communication will be added later
-    console.log(device + " changed to " + state);
+    console.log(
+        "Command prepared:",
+        "device =", device,
+        "command =", command
+    );
+
+
+    /*
+     * HTTP communication will be enabled when the
+     * central controller API is finalized.
+     *
+     * Expected request format:
+     *
+     * await fetch(`${API_BASE}/control`, {
+     *
+     *     method: "POST",
+     *
+     *     headers: {
+     *         "Content-Type":
+     *         "application/x-www-form-urlencoded"
+     *     },
+     *
+     *     body:
+     *         `device=${device}&cmd=${command}`
+     * });
+     *
+     *
+     * The current smart-light firmware already uses
+     * commands in this format:
+     *
+     *      cmd=on
+     *      cmd=off
+     *      cmd=auto
+     *
+     * The exact central-controller endpoint will be
+     * confirmed with the communications implementation.
+     */
+
+
+    // Return true for now so that the interface
+    // can still be tested without the ESP32 network.
+    return true;
 }
+
+
+/*
+ * Change the state of a device.
+ *
+ * This function:
+ *
+ * 1. Prepares/sends the device command.
+ * 2. Updates the displayed state.
+ * 3. Highlights the selected button.
+ */
+async function setState(device, state, button) {
+
+    try {
+
+        const success =
+            await sendCommand(device, state);
+
+
+        if (!success) {
+
+            console.error(
+                "Unable to send command:",
+                device,
+                state
+            );
+
+            return;
+        }
+
+
+        // Update the displayed status.
+        document.getElementById(
+            device + "-status"
+        ).textContent = state;
+
+
+        // Find the current device card.
+        const deviceSection =
+            button.parentElement;
+
+
+        // Get all buttons for this device.
+        const buttons =
+            deviceSection.querySelectorAll("button");
+
+
+        // Remove the active state from all buttons.
+        buttons.forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+        // Highlight the selected button.
+        button.classList.add("active");
+
+
+        console.log(
+            device + " changed to " + state
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "HTTP communication error:",
+            error
+        );
+    }
+}
+
+
+/*
+ * Retrieve the actual device states.
+ *
+ * Brandon's communications code is being developed
+ * so that the central controller can communicate with
+ * the individual nodes and obtain their status.
+ *
+ * Once the central controller exposes that information
+ * to the webpage, this function can periodically request it.
+ */
+async function updateDeviceStatus() {
+
+    /*
+     * Example future implementation:
+     *
+     * const response =
+     *     await fetch(`${API_BASE}/status`);
+     *
+     * const status =
+     *     await response.json();
+     *
+     *
+     * document.getElementById(
+     *     "light-status"
+     * ).textContent =
+     *     status.light.toUpperCase();
+     *
+     *
+     * document.getElementById(
+     *     "outlet-status"
+     * ).textContent =
+     *     status.outlet.toUpperCase();
+     *
+     *
+     * document.getElementById(
+     *     "humidifier-status"
+     * ).textContent =
+     *     status.humidifier.toUpperCase();
+     */
+}
+
+
+/*
+ * Status polling can be enabled after the
+ * central controller status API is available.
+ *
+ * Example:
+ *
+ * setInterval(updateDeviceStatus, 5000);
+ */
 
 </script>
 
+
 </body>
+
 </html>
