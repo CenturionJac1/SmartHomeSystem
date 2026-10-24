@@ -69,53 +69,78 @@ static const httpd_uri_t dashboard = {
 // HTTP POST handler
 static esp_err_t post_handler(httpd_req_t *req) {
     char buf[100];
-    int ret, remaining = req->content_len;
-    while (remaining > 0) {
-        if ((ret = httpd_req_recv(req, buf, MIN(remaining, sizeof(buf)))) <= 0) {
-            if (ret == HTTPD_SOCK_ERR_TIMEOUT) continue;
+    size_t received = 0;
+
+    // Leave room for the null terminator.
+    if (req->content_len == 0 ||
+        req->content_len >= sizeof(buf)) {
+        httpd_resp_set_status(req, "400 Bad Request");
+        httpd_resp_sendstr(req, "Invalid command length");
+        return ESP_FAIL;
+    }
+
+    // Collect the entire request body.
+    while (received < req->content_len) {
+        int ret = httpd_req_recv(
+            req,
+            buf + received,
+            req->content_len - received
+        );
+
+        if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
+            httpd_resp_send_err(
+                req,
+                HTTPD_408_REQ_TIMEOUT,
+                "Request timed out"
+            );
             return ESP_FAIL;
         }
-        remaining -= ret;
-        ESP_LOGI(TAG, "=========== RECEIVED DATA ==========");
-        ESP_LOGI(TAG, "%.*s", ret, buf);
-        ESP_LOGI(TAG, "====================================");
-    }
-    buf[req->content_len] = '\0';
 
-    // Parse the command and update FSM + relay accordingly
-    const char *resp_str = NULL;
-    if (strstr(buf, "cmd=on")) {
-        // Manual ON: force light on, stop inactivity timer
+        if (ret <= 0) {
+            return ESP_FAIL;
+        }
+
+        received += (size_t)ret;
+    }
+
+    buf[received] = '\0';
+
+    // Check that the FSM has been initialized.
+    if (fsm_ptr == NULL) {
+        httpd_resp_set_status(req, "503 Service Unavailable");
+        return httpd_resp_sendstr(req, "Controller not ready");
+    }
+
+    ESP_LOGI(TAG, "Received command: %s", buf);
+
+    // Match the complete command.
+    if (strcmp(buf, "cmd=on") == 0) {
         fsm_ptr->currentState = STATE_ON_MANUAL;
         Turn_On();
         Timer_Stop();
-        resp_str = "Light ON (Manual)";
         ESP_LOGI(TAG, "Manual ON");
-    } else if (strstr(buf, "cmd=off")) {
-        // Manual OFF: force light off, stop inactivity timer
+
+    } else if (strcmp(buf, "cmd=off") == 0) {
         fsm_ptr->currentState = STATE_OFF_MANUAL;
         Turn_Off();
         Timer_Stop();
-        resp_str = "Light OFF (Manual)";
         ESP_LOGI(TAG, "Manual OFF");
-    } else if (strstr(buf, "cmd=auto")) {
-        // Auto mode: return control to the motion sensor FSM
+
+    } else if (strcmp(buf, "cmd=auto") == 0) {
         fsm_ptr->currentState = STATE_OFF;
         Turn_Off();
         Timer_Stop();
-        resp_str = "Auto mode";
         ESP_LOGI(TAG, "Auto mode");
+
     } else {
-        resp_str = "Unknown command";
-        ESP_LOGE(TAG, "Unknown command");
+        httpd_resp_set_status(req, "400 Bad Request");
+        return httpd_resp_sendstr(req, "Unknown command");
     }
 
-    // Redirect browser back to dashboard after handling POST
+    // Return to the dashboard.
     httpd_resp_set_status(req, "303 See Other");
     httpd_resp_set_hdr(req, "Location", "/");
-    httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
-    httpd_resp_send_chunk(req, NULL, 0);
-    return ESP_OK;
+    return httpd_resp_send(req, NULL, 0);
 }
 
 // URI registration for the control endpoint (POST /control)

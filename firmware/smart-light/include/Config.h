@@ -3,15 +3,17 @@
 
 #include "driver/gpio.h"
 
-// TODO: Change as you want
-
-// TODO: Set the GPIO pin connected to the relay control input
+// GPIO connected to the relay control input.
 #define CONFIG_RELAY_GPIO_PIN GPIO_NUM_5
 
-// TODO: Set the GPIO pin connected to the PIR motion sensor output
+// GPIO connected to the PIR sensor output.
 #define CONFIG_PIR_OUTPUT_PIN GPIO_NUM_14
 
-// TODO: Set the desired inactivity timeout in microseconds before the light turns off
-#define CONFIG_INACTIVITY_US 10000000 // 10 seconds
+// Relay output levels: assumes an active-high relay.
+#define CONFIG_RELAY_ON_LEVEL  1
+#define CONFIG_RELAY_OFF_LEVEL 0
 
-#endif 
+// Turn off after 10 seconds without a motion signal.
+#define CONFIG_INACTIVITY_US 10000000LL
+
+#endif
