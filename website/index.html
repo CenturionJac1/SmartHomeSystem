@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,9 +73,24 @@
             background-color: #333;
             color: white;
         }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #c0392b;
+        }
+
+        .note {
+            color: #777;
+            font-size: 13px;
+        }
     </style>
 </head>
-
 
 <body>
 
@@ -82,7 +98,6 @@
     <h1>Smart Home Control</h1>
     <p>System Dashboard</p>
 </header>
-
 
 <div class="container">
 
@@ -93,27 +108,24 @@
 
         <div class="status">
             Status:
-            <span id="light-status">OFF</span>
+            <span id="light-status">UNKNOWN</span>
         </div>
 
-        <button
-            onclick="setState('light', 'OFF', this)"
-            class="active">
+        <button onclick="setState('light', 'OFF', this)">
             OFF
         </button>
 
-        <button
-            onclick="setState('light', 'ON', this)">
+        <button onclick="setState('light', 'ON', this)">
             ON
         </button>
 
-        <button
-            onclick="setState('light', 'AUTO', this)">
+        <button onclick="setState('light', 'AUTO', this)">
             AUTO
         </button>
 
-    </div>
+        <p id="light-message" class="message"></p>
 
+    </div>
 
     <!-- Smart Outlet -->
     <div class="device">
@@ -131,13 +143,13 @@
             OFF
         </button>
 
-        <button
-            onclick="setState('outlet', 'ON', this)">
+        <button onclick="setState('outlet', 'ON', this)">
             ON
         </button>
 
-    </div>
+        <p class="note">Demo mode - hardware integration pending.</p>
 
+    </div>
 
     <!-- Humidifier -->
     <div class="device">
@@ -155,240 +167,276 @@
             OFF
         </button>
 
-        <button
-            onclick="setState('humidifier', 'LOW', this)">
+        <button onclick="setState('humidifier', 'LOW', this)">
             LOW
         </button>
 
-        <button
-            onclick="setState('humidifier', 'HIGH', this)">
+        <button onclick="setState('humidifier', 'HIGH', this)">
             HIGH
         </button>
+
+        <p class="note">Demo mode - hardware integration pending.</p>
 
     </div>
 
 </div>
-
 
 <script>
 
 /*
  * Smart Home Web Interface
  *
- * The user interface is complete.
+ * Smart Light commands are sent to the Central Controller
+ * through HTTP.
  *
- * HTTP communication with the central controller will be enabled
- * after the central controller API and endpoints are finalized.
+ * Smart Outlet and Humidifier remain demo-only until
+ * their controller endpoints are implemented.
  */
 
+// Central Controller IP address.
+// Confirm this address during hardware testing.
+const API_BASE = "http://192.168.1.100";
 
-// Base address for the central controller.
-//
-// If the webpage is hosted directly by the central ESP32,
-// this may remain empty and relative URLs can be used.
-//
-// If necessary, this can later be changed to something such as:
-//
-// const API_BASE = "http://192.168.1.100";
-//
-const API_BASE = "";
+const REQUEST_TIMEOUT = 5000;
+
+// Node and light identifiers used by the controller.
+// Confirm these values with the communications firmware.
+const LIGHT_NODE_ID = 1;
+const LIGHT_ID = 1;
+
+// Prevent multiple simultaneous commands to the same device.
+const pendingDevices = new Set();
 
 
 /*
- * Send a control command.
+ * Send a control command to the Central Controller.
  *
- * This function provides one shared location for communication
- * between the webpage and the central controller.
+ * Smart Light request:
  *
- * Device examples:
- *      light
- *      outlet
- *      humidifier
+ * POST /control
+ * Content-Type: application/json
  *
- * Command examples:
- *      on
- *      off
- *      auto
- *      low
- *      high
+ * {
+ *     "node": 1,
+ *     "light": 1,
+ *     "state": "on"
+ * }
  */
 async function sendCommand(device, state) {
 
-    // Firmware commands use lowercase values.
     const command = state.toLowerCase();
 
-    console.log(
-        "Command prepared:",
-        "device =", device,
-        "command =", command
-    );
+    // Other devices are not supported by the controller yet.
+    if (device !== "light") {
+        console.log("Demo mode:", device, command);
+        return true;
+    }
 
+    const controller = new AbortController();
 
-    /*
-     * HTTP communication will be enabled when the
-     * central controller API is finalized.
-     *
-     * Expected request format:
-     *
-     * await fetch(`${API_BASE}/control`, {
-     *
-     *     method: "POST",
-     *
-     *     headers: {
-     *         "Content-Type":
-     *         "application/x-www-form-urlencoded"
-     *     },
-     *
-     *     body:
-     *         `device=${device}&cmd=${command}`
-     * });
-     *
-     *
-     * The current smart-light firmware already uses
-     * commands in this format:
-     *
-     *      cmd=on
-     *      cmd=off
-     *      cmd=auto
-     *
-     * The exact central-controller endpoint will be
-     * confirmed with the communications implementation.
-     */
+    const timeout = setTimeout(() => {
+        controller.abort();
+    }, REQUEST_TIMEOUT);
 
+    try {
 
-    // Return true for now so that the interface
-    // can still be tested without the ESP32 network.
-    return true;
+        const response = await fetch(`${API_BASE}/control`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                node: LIGHT_NODE_ID,
+                light: LIGHT_ID,
+                state: command
+            }),
+            signal: controller.signal
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "Controller returned HTTP " + response.status
+            );
+        }
+
+        const result = await response.json();
+
+        if (result.success !== true) {
+            throw new Error(
+                result.message ||
+                result.error ||
+                "Controller did not confirm the command."
+            );
+        }
+
+        console.log(
+            "Smart Light command successful:",
+            result
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Controller request failed:",
+            error
+        );
+
+        const message =
+            error.name === "AbortError"
+                ? "Request timed out. Check the controller connection."
+                : "Unable to control Smart Light: " + error.message;
+
+        document.getElementById(
+            "light-message"
+        ).textContent = message;
+
+        return false;
+
+    } finally {
+
+        clearTimeout(timeout);
+
+    }
 }
 
 
 /*
  * Change the state of a device.
  *
- * This function:
- *
- * 1. Prepares/sends the device command.
- * 2. Updates the displayed state.
- * 3. Highlights the selected button.
+ * 1. Send the command.
+ * 2. Wait for the result.
+ * 3. Update the displayed state only if successful.
+ * 4. Highlight the selected button.
  */
 async function setState(device, state, button) {
+
+    if (pendingDevices.has(device)) {
+        return;
+    }
+
+    pendingDevices.add(device);
+
+    const deviceSection = button.closest(".device");
+
+    const buttons =
+        deviceSection.querySelectorAll("button");
+
+    buttons.forEach(function(btn) {
+        btn.disabled = true;
+    });
+
+    if (device === "light") {
+        document.getElementById(
+            "light-message"
+        ).textContent = "";
+    }
 
     try {
 
         const success =
             await sendCommand(device, state);
 
-
         if (!success) {
-
-            console.error(
-                "Unable to send command:",
-                device,
-                state
-            );
-
             return;
         }
 
-
-        // Update the displayed status.
         document.getElementById(
             device + "-status"
         ).textContent = state;
 
-
-        // Find the current device card.
-        const deviceSection =
-            button.parentElement;
-
-
-        // Get all buttons for this device.
-        const buttons =
-            deviceSection.querySelectorAll("button");
-
-
-        // Remove the active state from all buttons.
         buttons.forEach(function(btn) {
-
             btn.classList.remove("active");
-
         });
 
-
-        // Highlight the selected button.
         button.classList.add("active");
-
 
         console.log(
             device + " changed to " + state
         );
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "HTTP communication error:",
+            "Unexpected control error:",
             error
         );
+
+        if (device === "light") {
+            document.getElementById(
+                "light-message"
+            ).textContent = error.message;
+        }
+
+    } finally {
+
+        pendingDevices.delete(device);
+
+        buttons.forEach(function(btn) {
+            btn.disabled = false;
+        });
+
     }
 }
 
 
 /*
- * Retrieve the actual device states.
+ * Retrieve controller status.
  *
- * Brandon's communications code is being developed
- * so that the central controller can communicate with
- * the individual nodes and obtain their status.
- *
- * Once the central controller exposes that information
- * to the webpage, this function can periodically request it.
+ * This function is prepared for future status polling.
+ * The exact response structure must be verified against
+ * the controller firmware before updating device states.
  */
 async function updateDeviceStatus() {
 
-    /*
-     * Example future implementation:
-     *
-     * const response =
-     *     await fetch(`${API_BASE}/status`);
-     *
-     * const status =
-     *     await response.json();
-     *
-     *
-     * document.getElementById(
-     *     "light-status"
-     * ).textContent =
-     *     status.light.toUpperCase();
-     *
-     *
-     * document.getElementById(
-     *     "outlet-status"
-     * ).textContent =
-     *     status.outlet.toUpperCase();
-     *
-     *
-     * document.getElementById(
-     *     "humidifier-status"
-     * ).textContent =
-     *     status.humidifier.toUpperCase();
-     */
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+        controller.abort();
+    }, REQUEST_TIMEOUT);
+
+    try {
+
+        const response = await fetch(`${API_BASE}/status`, {
+            method: "GET",
+            signal: controller.signal
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                "Status request failed: HTTP " + response.status
+            );
+        }
+
+        const status = await response.json();
+
+        console.log("Controller status:", status);
+
+        return status;
+
+    } catch (error) {
+
+        console.error(
+            "Unable to retrieve controller status:",
+            error
+        );
+
+        return null;
+
+    } finally {
+
+        clearTimeout(timeout);
+
+    }
 }
 
-
-/*
- * Status polling can be enabled after the
- * central controller status API is available.
- *
- * Example:
- *
- * setInterval(updateDeviceStatus, 5000);
- */
+// Enable periodic status polling after the controller
+// response format and hardware behavior are verified.
+//
+// setInterval(updateDeviceStatus, 5000);
 
 </script>
 
-
 </body>
-
 </html>
