@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}

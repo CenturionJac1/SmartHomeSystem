@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader
+/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/CMakeFiles/bootloader-complete.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/minjukim/Desktop/SmartHomeSystem/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

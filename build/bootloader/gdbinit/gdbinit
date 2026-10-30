@@ -1,0 +1,2 @@
+source /Users/minjukim/Desktop/SmartHomeSystem/build/bootloader/gdbinit/symbols
+source /Users/minjukim/Desktop/SmartHomeSystem/build/bootloader/gdbinit/connect

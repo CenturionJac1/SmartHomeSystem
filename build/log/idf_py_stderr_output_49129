@@ -1,0 +1,38 @@
+Command: /Users/minjukim/.espressif/tools/python/v6.1/venv/bin/python /Users/minjukim/.espressif/v6.1/esp-idf/tools/idf_monitor.py -p /dev/cu.usbserial-10 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 /Users/minjukim/Desktop/SmartHomeSystem/build/smart_light.elf /Users/minjukim/Desktop/SmartHomeSystem/build/bootloader/bootloader.elf -m '/Users/minjukim/.espressif/tools/python/v6.1/venv/bin/python' '/Users/minjukim/.espressif/v6.1/esp-idf/tools/idf.py'
+--- esp-idf-monitor 1.10.0 on /dev/cu.usbserial-10 115200
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x4200ee60: app_main at /Users/minjukim/Desktop/SmartHomeSystem/firmware/smart-light/src/main.c:46
+--- 0x4037d117: _esp_error_check_failed at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/esp_err.c:38
+--- 0x4037d159: panic_abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/panic.c:500
+--- 0x4037d121: esp_system_abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/port/esp_system_chip.c:87
+--- 0x4037cb61: abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_libc/src/abort.c:38
+--- 0x4037d117: _esp_error_check_failed at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/esp_err.c:38
+--- 0x4200ee60: app_main at /Users/minjukim/Desktop/SmartHomeSystem/firmware/smart-light/src/main.c:46
+--- 0x420081ec: main_task at /Users/minjukim/.espressif/v6.1/esp-idf/components/freertos/app_startup.c:206
+--- 0x4209200a: vPortTaskWrapper at /Users/minjukim/.espressif/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:147
+--- 0x4037d2d9: esp_restart_noos at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:171
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x4200ee60: app_main at /Users/minjukim/Desktop/SmartHomeSystem/firmware/smart-light/src/main.c:46
+--- 0x4037d117: _esp_error_check_failed at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/esp_err.c:38
+--- 0x4037d159: panic_abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/panic.c:500
+--- 0x4037d121: esp_system_abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/port/esp_system_chip.c:87
+--- 0x4037cb61: abort at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_libc/src/abort.c:38
+--- 0x4037d117: _esp_error_check_failed at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/esp_err.c:38
+--- 0x4200ee60: app_main at /Users/minjukim/Desktop/SmartHomeSystem/firmware/smart-light/src/main.c:46
+--- 0x420081ec: main_task at /Users/minjukim/.espressif/v6.1/esp-idf/components/freertos/app_startup.c:206
+--- 0x4209200a: vPortTaskWrapper at /Users/minjukim/.espressif/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:147
+--- 0x4037d2d9: esp_restart_noos at /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:171
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x403c8700: _stext at ??:?
+--- 0x403c8904: call_start_cpu0 at /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/subproject/main/bootloader_start.c:27
+--- 0x403c870

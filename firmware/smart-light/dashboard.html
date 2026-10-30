@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Home Lighting Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f9;color:#1f2937;font-family:Arial,sans-serif}
+header{padding:26px 12px;background:#1f2937;color:white;text-align:center}
+header h1{margin:0 0 8px;font-size:26px}
+header p{margin:0;color:#d1d5db}
+main{max-width:780px;margin:26px auto;padding:0 18px}
+.card{background:white;border-radius:12px;padding:23px;margin-bottom:17px;box-shadow:0 2px 9px #00000010}
+h2{margin:0 0 18px;font-size:20px}
+.controls{display:flex;gap:9px;flex-wrap:wrap}
+button{padding:11px 22px;border:0;border-radius:7px;cursor:pointer;font-size:15px}
+button.active{background:#2563eb;color:white}
+button:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.value{font-size:20px;font-weight:bold}
+.note{font-size:13px;color:#6b7280;line-height:1.5}
+#message{min-height:20px;font-size:14px}
+@media(max-width:580px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>Smart Home Lighting Dashboard</h1>
+<p>ESP32-S3 Lighting Control &amp; Monitoring</p>
+</header>
+
+<main>
+<section class="card">
+<h2>Smart Light</h2>
+<p>Output command: <strong id="light">UNKNOWN</strong></p>
+<p>Mode: <strong id="mode">UNKNOWN</strong></p>
+<div class="controls">
+<button data-mode="off" onclick="setLight('off')">OFF</button>
+<button data-mode="on" onclick="setLight('on')">ON</button>
+<button data-mode="auto" onclick="setLight('auto')">AUTO</button>
+</div>
+<p id="message" role="status" aria-live="polite"></p>
+<p class="note">
+Output reflects firmware state, not independent confirmation of the physical light.
+</p>
+</section>
+
+<div class="grid">
+<section class="card">
+<h2>ESP32-S3 Connection</h2>
+<div id="connection" class="value">CHECKING...</div>
+<p id="address" class="note"></p>
+</section>
+
+<section class="card">
+<h2>Motion Sensor</h2>
+<div id="motion" class="value">UNKNOWN</div>
+<p class="note">Shows the PIR output, not continuous occupancy.</p>
+</section>
+
+<section class="card">
+<h2>Sensor Initialization</h2>
+<div id="sensor" class="value">UNKNOWN</div>
+<p class="note">This does not detect disconnected or faulty sensor wiring.</p>
+</section>
+
+<section class="card">
+<h2>Last Status Update</h2>
+<div id="updated" class="value">NEVER</div>
+<p class="note">Refreshes every 2 seconds.</p>
+</section>
+</div>
+</main>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+let commandPending = false;
+let statusPending = false;
+
+async function request(path, options = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+
+    try {
+        const response = await fetch(path, {
+            ...options,
+            cache: 'no-store',
+            signal: controller.signal
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `HTTP ${response.status}`);
+        }
+
+        return data;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+async function updateStatus() {
+    if (statusPending) return;
+    statusPending = true;
+
+    try {
+        const data = await request('/status');
+
+        $('connection').textContent = 'ONLINE';
+        $('address').textContent = 'Board address: ' + location.host;
+        $('light').textContent = data.output;
+        $('mode').textContent = data.mode.toUpperCase();
+        $('motion').textContent = data.sensorError
+            ? 'UNAVAILABLE'
+            : data.motion ? 'MOTION DETECTED' : 'NO MOTION';
+        $('sensor').textContent = data.sensorError ? 'ERROR' : 'READY';
+        $('updated').textContent = new Date().toLocaleTimeString();
+
+        document.querySelectorAll('[data-mode]').forEach(button => {
+            const selected = button.dataset.mode === data.mode;
+            button.classList.toggle('active', selected);
+            button.setAttribute('aria-pressed', String(selected));
+        });
+    } catch (error) {
+        $('connection').textContent = 'UNREACHABLE';
+        $('light').textContent = 'UNKNOWN';
+        $('mode').textContent = 'UNKNOWN';
+        $('motion').textContent = 'UNKNOWN';
+        $('sensor').textContent = 'UNKNOWN';
+
+        document.querySelectorAll('[data-mode]').forEach(button => {
+            button.classList.remove('active');
+            button.setAttribute('aria-pressed', 'false');
+        });
+    } finally {
+        statusPending = false;
+    }
+}
+
+async function setLight(state) {
+    if (commandPending) return;
+    commandPending = true;
+
+    document.querySelectorAll('button').forEach(button => {
+        button.disabled = true;
+    });
+
+    $('message').textContent = 'Sending command...';
+
+    try {
+        const result = await request('/control', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({cmd: state}).toString()
+        });
+
+        if (!result.success) {
+            throw new Error('Command was not accepted');
+        }
+
+        $('message').textContent = 'Command accepted.';
+        await updateStatus();
+    } catch (error) {
+        $('message').textContent =
+            'Command failed or was not confirmed. Check board status.';
+    } finally {
+        commandPending = false;
+        document.querySelectorAll('button').forEach(button => {
+            button.disabled = false;
+        });
+    }
+}
+
+updateStatus();
+setInterval(updateStatus, 2000);
+</script>
+</body>
+</html>

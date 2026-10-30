@@ -1,0 +1,23 @@
+idf_component_register(
+    SRCS
+        "src/main.c"
+        "src/FSM.c"
+        "src/Relay_Control.c"
+        "src/Sensor_Read.c"
+        "src/Timer.c"
+        "src/Web_Server.c"
+    INCLUDE_DIRS
+        "include"
+    REQUIRES
+        driver
+        esp_driver_gpio
+        esp_timer
+        esp_http_server
+        nvs_flash
+        esp_event
+        esp_netif
+        esp_wifi
+        protocol_examples_common
+    EMBED_TXTFILES
+        "dashboard.html"
+)

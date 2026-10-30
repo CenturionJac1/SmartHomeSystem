@@ -1,0 +1,111 @@
+Command: ninja all
+[0/1] Re-running CMake...
+-- Minimal build - OFF
+-- Building ESP-IDF components for target esp32s3
+NOTE: Skipping optional dependency: espressif/ch390
+NOTE: Skipping optional dependency: espressif/dm9051
+NOTE: Skipping optional dependency: espressif/dp83848
+NOTE: Skipping optional dependency: espressif/enc28j60
+NOTE: Skipping optional dependency: espressif/ip101
+NOTE: Skipping optional dependency: espressif/ksz80xx
+NOTE: Skipping optional dependency: espressif/ksz8851snl
+NOTE: Skipping optional dependency: espressif/lan865x
+NOTE: Skipping optional dependency: espressif/lan867x
+NOTE: Skipping optional dependency: espressif/lan87xx
+NOTE: Skipping optional dependency: espressif/rtl8201
+NOTE: Skipping optional dependency: espressif/vsc8541
+NOTE: Skipping optional dependency: espressif/w5500
+NOTE: Skipping optional dependency: espressif/w6100
+NOTE: Skipping optional dependency: espressif/yt8531
+NOTE: Processing 2 dependencies:
+NOTE: [1/2] espressif/ethernet_init (1.4.1)
+NOTE: [2/2] idf (6.1.0)
+NOTE: Skipping optional dependency: espressif/ch390
+NOTE: Skipping optional dependency: espressif/dm9051
+NOTE: Skipping optional dependency: espressif/dp83848
+NOTE: Skipping optional dependency: espressif/enc28j60
+NOTE: Skipping optional dependency: espressif/ip101
+NOTE: Skipping optional dependency: espressif/ksz80xx
+NOTE: Skipping optional dependency: espressif/ksz8851snl
+NOTE: Skipping optional dependency: espressif/lan865x
+NOTE: Skipping optional dependency: espressif/lan867x
+NOTE: Skipping optional dependency: espressif/lan87xx
+NOTE: Skipping optional dependency: espressif/rtl8201
+NOTE: Skipping optional dependency: espressif/vsc8541
+NOTE: Skipping optional dependency: espressif/w5500
+NOTE: Skipping optional dependency: espressif/w6100
+NOTE: Skipping optional dependency: espressif/yt8531
+-- KCONFIG_REPORT_VERBOSITY not set, using default
+-- Project sdkconfig file /Users/minjukim/Desktop/SmartHomeSystem/sdkconfig
+-- Compiler supported targets: xtensa-esp-elf
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- App "smart_light" version: 291505f-dirty
+-- Setting up mbedtls configuration
+-- Linkage type is PUBLIC
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_wdt/esp32s3/rom.wdt.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/ld/esp32s3/memory.ld.in
+--   -> Preprocessing .in script: /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/ld/esp32s3/memory.ld.in
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/ld/esp32s3/sections.ld.in
+--   -> Preprocessing .in script: /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/ld/esp32s3/sections.ld.in
+--   -> Applying ldgen processing: /Users/minjukim/Desktop/SmartHomeSystem/build/esp-idf/esp_system/ld/sections.ld.in
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.api.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.bt_funcs.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.libgcc.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.version.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_master.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_50.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_smp.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_dtm.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_test.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.ble_scan.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom/esp32s3/ld/esp32s3.rom.libc.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/soc/esp32s3/ld/esp32s3.peripherals.ld
+-- Adding linker script /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_regi2c/esp32s3/rom.regi2c.ld
+-- Component idf::esp_trace will be linked with -Wl,--whole-archive
+-- Components: app_trace app_update bootloader bootloader_support bt cmock console cxx driver efuse esp-tls esp_adc esp_app_format esp_asrc_adapter esp_blockdev esp_blockdev_util esp_bootloader_format esp_coex esp_common esp_driver_ana_cmpr esp_driver_bitscrambler esp_driver_cam esp_driver_cordic esp_driver_dac esp_driver_dma esp_driver_gpio esp_driver_gptimer esp_driver_i2c esp_driver_i2s esp_driver_i3c esp_driver_isp esp_driver_jpeg esp_driver_ledc esp_driver_mcpwm esp_driver_parlio esp_driver_pcnt esp_driver_ppa esp_driver_rmt esp_driver_sd_intf esp_driver_sdio esp_driver_sdm esp_driver_sdmmc esp_driver_sdspi esp_driver_spi esp_driver_touch_sens esp_driver_tsens esp_driver_twai esp_driver_uart esp_driver_usb_serial_jtag esp_eth esp_event esp_gdbstub esp_hal_ana_cmpr esp_hal_ana_conv esp_hal_asrc esp_hal_cam esp_hal_clock esp_hal_cordic esp_hal_dma esp_hal_emac esp_hal_gpio esp_hal_gpspi esp_hal_i2c esp_hal_i2s esp_hal_i3c esp_hal_ieee802154 esp_hal_jpeg esp_hal_lcd esp_hal_ledc esp_hal_mcpwm esp_hal_mspi esp_hal_parlio esp_hal_pcnt esp_hal_pmu esp_hal_ppa esp_hal_regi2c esp_hal_rmt esp_hal_rtc_timer esp_hal_sd esp_hal_security esp_hal_systimer esp_hal_timg esp_hal_touch_sens esp_hal_twai esp_hal_uart esp_hal_usb esp_hal_wdt esp_hid esp_http_client esp_http_server esp_https_ota esp_https_server esp_hw_support esp_lcd esp_libc esp_local_ctrl esp_mm esp_netif esp_netif_stack esp_partition esp_phy esp_pm esp_psram esp_ringbuf esp_rom esp_security esp_stdio esp_system esp_timer esp_trace esp_usb_cdc_rom_console esp_wifi espcoredump espressif__ethernet_init esptool_py fatfs freertos hal heap http_parser ieee802154 log lwip mbedtls nvs_flash nvs_sec_provider openthread partition_table perfmon protobuf-c protocol_examples_common protocomm pthread rt sdmmc smart-light soc spi_flash spiffs tcp_transport ulp unity vfs wear_levelling wpa_supplicant xtensa
+-- Component paths: /Users/minjukim/.espressif/v6.1/esp-idf/components/app_trace /Users/minjukim/.espressif/v6.1/esp-idf/components/app_update /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader_support /Users/minjukim/.espressif/v6.1/esp-idf/components/bt /Users/minjukim/.espressif/v6.1/esp-idf/components/cmock /Users/minjukim/.espressif/v6.1/esp-idf/components/console /Users/minjukim/.espressif/v6.1/esp-idf/components/cxx /Users/minjukim/.espressif/v6.1/esp-idf/components/driver /Users/minjukim/.espressif/v6.1/esp-idf/components/efuse /Users/minjukim/.espressif/v6.1/esp-idf/components/esp-tls /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_adc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_app_format /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_asrc_adapter /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_blockdev /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_blockdev_util /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_bootloader_format /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_coex /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_common /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_ana_cmpr /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_bitscrambler /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_cam /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_cordic /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_dac /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_dma /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_gpio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_gptimer /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_i2c /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_i2s /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_i3c /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_isp /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_jpeg /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_ledc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_mcpwm /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_parlio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_pcnt /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_ppa /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_rmt /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_sd_intf /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_sdio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_sdm /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_sdmmc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_sdspi /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_spi /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_touch_sens /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_tsens /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_twai /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_uart /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_driver_usb_serial_jtag /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_eth /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_event /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_gdbstub /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_ana_cmpr /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_ana_conv /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_asrc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_cam /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_clock /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_cordic /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_dma /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_emac /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_gpio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_gpspi /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_i2c /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_i2s /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_i3c /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_ieee802154 /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_jpeg /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_lcd /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_ledc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_mcpwm /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_mspi /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_parlio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_pcnt /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_pmu /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_ppa /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_regi2c /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_rmt /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_rtc_timer /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_sd /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_security /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_systimer /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_timg /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_touch_sens /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_twai /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_uart /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_usb /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hal_wdt /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hid /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_http_client /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_http_server /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_https_ota /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_https_server /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hw_support /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_lcd /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_libc /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_local_ctrl /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_mm /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_netif /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_netif_stack /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_partition /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_phy /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_pm /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_psram /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_ringbuf /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_rom /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_security /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_stdio /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_timer /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_trace /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_usb_cdc_rom_console /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_wifi /Users/minjukim/.espressif/v6.1/esp-idf/components/espcoredump /Users/minjukim/Desktop/SmartHomeSystem/managed_components/espressif__ethernet_init /Users/minjukim/.espressif/v6.1/esp-idf/components/esptool_py /Users/minjukim/.espressif/v6.1/esp-idf/components/fatfs /Users/minjukim/.espressif/v6.1/esp-idf/components/freertos /Users/minjukim/.espressif/v6.1/esp-idf/components/hal /Users/minjukim/.espressif/v6.1/esp-idf/components/heap /Users/minjukim/.espressif/v6.1/esp-idf/components/http_parser /Users/minjukim/.espressif/v6.1/esp-idf/components/ieee802154 /Users/minjukim/.espressif/v6.1/esp-idf/components/log /Users/minjukim/.espressif/v6.1/esp-idf/components/lwip /Users/minjukim/.espressif/v6.1/esp-idf/components/mbedtls /Users/minjukim/.espressif/v6.1/esp-idf/components/nvs_flash /Users/minjukim/.espressif/v6.1/esp-idf/components/nvs_sec_provider /Users/minjukim/.espressif/v6.1/esp-idf/components/openthread /Users/minjukim/.espressif/v6.1/esp-idf/components/partition_table /Users/minjukim/.espressif/v6.1/esp-idf/components/perfmon /Users/minjukim/.espressif/v6.1/esp-idf/components/protobuf-c /Users/minjukim/.espressif/v6.1/esp-idf/examples/common_components/protocol_examples_common /Users/minjukim/.espressif/v6.1/esp-idf/components/protocomm /Users/minjukim/.espressif/v6.1/esp-idf/components/pthread /Users/minjukim/.espressif/v6.1/esp-idf/components/rt /Users/minjukim/.espressif/v6.1/esp-idf/components/sdmmc /Users/minjukim/Desktop/SmartHomeSystem/firmware/smart-light /Users/minjukim/.espressif/v6.1/esp-idf/components/soc /Users/minjukim/.espressif/v6.1/esp-idf/components/spi_flash /Users/minjukim/.espressif/v6.1/esp-idf/components/spiffs /Users/minjukim/.espressif/v6.1/esp-idf/components/tcp_transport /Users/minjukim/.espressif/v6.1/esp-idf/components/ulp /Users/minjukim/.espressif/v6.1/esp-idf/components/unity /Users/minjukim/.espressif/v6.1/esp-idf/components/vfs /Users/minjukim/.espressif/v6.1/esp-idf/components/wear_levelling /Users/minjukim/.espressif/v6.1/esp-idf/components/wpa_supplicant /Users/minjukim/.espressif/v6.1/esp-idf/components/xtensa
+-- Configuring done (8.9s)
+-- Generating done (0.9s)
+-- Build files have been written to: /Users/minjukim/Desktop/SmartHomeSystem/build
+[1/14] Performing build step for 'bootloader'
+[1/1] cd /Users/minjukim/Desktop/SmartHomeSystem/build/bootloader && /Users/minjukim/.espressif/tools/python/v6.1/venv/bin/python /Users/minjukim/.espressif/v6.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /Users/minjukim/Desktop/SmartHomeSystem/build/bootloader/bootloader.bin
+Bootloader binary size 0x5280 bytes. 0x2d80 bytes (36%) free.
+[2/14] No install step for 'bootloader'
+[3/14] Completed 'bootloader'
+[4/14] Building C object esp-idf/esp_app_format/CMakeFiles/__idf_esp_app_format.dir/esp_app_desc.c.obj
+[5/14] Linking C static library esp-idf/esp_app_format/libesp_app_format.a
+[6/14] Generating ../../dashboard.html.S
+[7/14] Building ASM object esp-idf/smart-light/CMakeFiles/__idf_smart-light.dir/__/__/dashboard.html.S.obj
+[8/14] Building C object esp-idf/smart-light/CMakeFiles/__idf_smart-light.dir/src/Web_Server.c.obj
+[9/14] Linking C static library esp-idf/smart-light/libsmart-light.a
+[10/14] Generating esp-idf/esp_system/ld/sections.ld
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bt/host/nimble/Kconfig.in:1428: BT_NIMBLE_MESH_PROVISIONER: 'default 0' is not a valid bool value (only 'y' and 'n' are allowed). Value is treated as 'n'.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/fatfs/Kconfig:240: FATFS_PRINT_LLI: 'default 0' is not a valid bool value (only 'y' and 'n' are allowed). Value is treated as 'n'.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/fatfs/Kconfig:245: FATFS_PRINT_FLOAT: 'default 0' is not a valid bool value (only 'y' and 'n' are allowed). Value is treated as 'n'.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/Kconfig.projbuild:383: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bootloader/Kconfig.projbuild:423: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bt/common/Kconfig.in:136: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bt/host/nimble/Kconfig.in:1023: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/bt/controller/esp32c3/Kconfig.in:652: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_hw_support/./lowpower/port/esp32p4/Kconfig.p4_rev3_mspi_workaround:6: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_mm/Kconfig:20: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/esp_system/./port/soc/esp32s3/Kconfig.memory:21: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+NOTE: /Users/minjukim/.espressif/v6.1/esp-idf/components/openthread/Kconfig:106: Deprecation notice: hex literal '0' without '0x' prefix detected. In the next major version, hex literals will be required to have a '0x' prefix.
+Skipping linker fragment parsing, fragment files unchanged
+[11/14] Linking CXX executable smart_light.elf
+[12/14] Generating binary image from built executable
+esptool v5.6.0
+Creating ESP32-S3 image...
+Merged 3 ELF sections.
+Successfully created ESP32-S3 image.
+Generated /Users/minjukim/Desktop/SmartHomeSystem/build/smart_light.bin
+[13/14] cd /Users/minjukim/Desktop/SmartHomeSystem/build && /Users/minjukim/.espressif/tools/python/v6.1/venv/bin/python /Users/minjukim/.espressif/v6.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/minjukim/Desktop/SmartHomeSystem/build/partition_table/partition-table.bin /Users/minjukim/Desktop/SmartHomeSystem/build/smart_light.bin
+smart_light.bin binary size 0xcd3c0 bytes. Smallest app partition is 0x100000 bytes. 0x32c40 bytes (20%) free.
