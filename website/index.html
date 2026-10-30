@@ -1,442 +1,122 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Smart Home Control</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        header h1 {
-            margin-bottom: 5px;
-        }
-
-        header p {
-            margin-top: 0;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .device {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .device h2 {
-            margin-top: 0;
-        }
-
-        .status {
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        button {
-            padding: 10px 18px;
-            margin-right: 8px;
-            margin-bottom: 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #dddddd;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        button:hover {
-            background-color: #cccccc;
-        }
-
-        button.active {
-            background-color: #333;
-            color: white;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .message {
-            font-size: 14px;
-            margin-top: 10px;
-            color: #c0392b;
-        }
-
-        .note {
-            color: #777;
-            font-size: 13px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home Lighting Dashboard</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#f3f5f9}*{box-sizing:border-box}body{margin:0}header{background:#1f2937;color:#fff;text-align:center;padding:26px 12px}header h1{margin:0 0 7px;font-size:26px}header p{margin:0;color:#d1d5db}.container{max-width:780px;margin:26px auto;padding:0 18px}.card{background:white;border-radius:12px;padding:23px;margin-bottom:17px;box-shadow:0 2px 9px #00000010}.card h2{margin:0 0 18px;font-size:20px}.status{font-size:17px;font-weight:bold;margin-bottom:16px}.controls{display:flex;flex-wrap:wrap;gap:9px}button{padding:11px 22px;border:0;border-radius:7px;background:#e5e7eb;color:#111827;font-size:15px;cursor:pointer}button:hover{background:#d1d5db}button.active{background:#2563eb;color:#fff}button:disabled{opacity:.5;cursor:wait}.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.label{font-size:13px;color:#6b7280;margin-bottom:9px}.value{font-size:20px;font-weight:700}.note{font-size:13px;color:#6b7280;line-height:1.5}.message{font-size:14px;color:#b91c1c;min-height:18px}.ok{color:#15803d}.bad{color:#b91c1c}@media(max-width:580px){.grid{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
-
-<header>
-    <h1>Smart Home Control</h1>
-    <p>System Dashboard</p>
-</header>
-
-<div class="container">
-
-    <!-- Smart Light -->
-    <div class="device">
-
-        <h2>Smart Light</h2>
-
-        <div class="status">
-            Status:
-            <span id="light-status">UNKNOWN</span>
-        </div>
-
-        <button onclick="setState('light', 'OFF', this)">
-            OFF
-        </button>
-
-        <button onclick="setState('light', 'ON', this)">
-            ON
-        </button>
-
-        <button onclick="setState('light', 'AUTO', this)">
-            AUTO
-        </button>
-
-        <p id="light-message" class="message"></p>
-
-    </div>
-
-    <!-- Smart Outlet -->
-    <div class="device">
-
-        <h2>Smart Outlet</h2>
-
-        <div class="status">
-            Status:
-            <span id="outlet-status">OFF</span>
-        </div>
-
-        <button
-            onclick="setState('outlet', 'OFF', this)"
-            class="active">
-            OFF
-        </button>
-
-        <button onclick="setState('outlet', 'ON', this)">
-            ON
-        </button>
-
-        <p class="note">Demo mode - hardware integration pending.</p>
-
-    </div>
-
-    <!-- Humidifier -->
-    <div class="device">
-
-        <h2>Humidifier</h2>
-
-        <div class="status">
-            Status:
-            <span id="humidifier-status">OFF</span>
-        </div>
-
-        <button
-            onclick="setState('humidifier', 'OFF', this)"
-            class="active">
-            OFF
-        </button>
-
-        <button onclick="setState('humidifier', 'LOW', this)">
-            LOW
-        </button>
-
-        <button onclick="setState('humidifier', 'HIGH', this)">
-            HIGH
-        </button>
-
-        <p class="note">Demo mode - hardware integration pending.</p>
-
-    </div>
-
+<header><h1>Smart Home Lighting Dashboard</h1><p>ESP32-S3 Lighting Control &amp; Monitoring</p></header>
+<main class="container">
+<section class="card" aria-label="Smart Light">
+<h2>Smart Light</h2>
+<div class="status">Light State: <span id="light-status">UNKNOWN</span></div>
+<div class="controls">
+<button data-state="off" onclick="setLight('off')">OFF</button>
+<button data-state="on" onclick="setLight('on')">ON</button>
+<button data-state="auto" onclick="setLight('auto')">AUTO</button>
 </div>
-
+<p id="light-message" class="message" role="status" aria-live="polite"></p>
+<p class="note">Commands are sent through the Central Controller to Smart Light Node 1. AUTO is managed by the node firmware.</p>
+</section>
+<div class="grid">
+<section class="card"><h2>Central Controller</h2><div class="label">Connection</div><div id="controller-status" class="value">CHECKING...</div><p id="controller-ip" class="note"></p></section>
+<section class="card"><h2>Smart Light Node</h2><div class="label">Node 1 connection</div><div id="node-status" class="value">CHECKING...</div><p id="node-detail" class="note"></p></section>
+<section class="card"><h2>Presence Sensor</h2><div class="label">Occupancy</div><div id="presence-status" class="value">NOT AVAILABLE</div><p class="note">Awaiting a sensor-status field from the firmware API. No presence data is inferred.</p></section>
+<section class="card"><h2>System Information</h2><div class="label">Last successful status update</div><div id="last-updated" class="value">NEVER</div><p class="note">Status is refreshed every 5 seconds while the page is open.</p></section>
+</div>
+</main>
 <script>
-
-/*
- * Smart Home Web Interface
- *
- * Smart Light commands are sent to the Central Controller
- * through HTTP.
- *
- * Smart Outlet and Humidifier remain demo-only until
- * their controller endpoints are implemented.
- */
-
-// Central Controller IP address.
-// Confirm this address during hardware testing.
-const API_BASE = "http://192.168.1.100";
-
-const REQUEST_TIMEOUT = 5000;
-
-// Node and light identifiers used by the controller.
-// Confirm these values with the communications firmware.
+'use strict';
+// Matches Brandon's central-controller firmware snapshot. Confirm actual IP at hardware testing.
+const API_BASE = 'http://192.168.1.100';
 const LIGHT_NODE_ID = 1;
 const LIGHT_ID = 1;
+const REQUEST_TIMEOUT = 5000;
+const POLL_INTERVAL = 5000;
+let commandPending = false;
+let statusPending = false;
+const $ = id => document.getElementById(id);
 
-// Prevent multiple simultaneous commands to the same device.
-const pendingDevices = new Set();
-
-
-/*
- * Send a control command to the Central Controller.
- *
- * Smart Light request:
- *
- * POST /control
- * Content-Type: application/json
- *
- * {
- *     "node": 1,
- *     "light": 1,
- *     "state": "on"
- * }
- */
-async function sendCommand(device, state) {
-
-    const command = state.toLowerCase();
-
-    // Other devices are not supported by the controller yet.
-    if (device !== "light") {
-        console.log("Demo mode:", device, command);
-        return true;
-    }
-
-    const controller = new AbortController();
-
-    const timeout = setTimeout(() => {
-        controller.abort();
-    }, REQUEST_TIMEOUT);
-
-    try {
-
-        const response = await fetch(`${API_BASE}/control`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                node: LIGHT_NODE_ID,
-                light: LIGHT_ID,
-                state: command
-            }),
-            signal: controller.signal
-        });
-
-        if (!response.ok) {
-            throw new Error(
-                "Controller returned HTTP " + response.status
-            );
-        }
-
-        const result = await response.json();
-
-        if (result.success !== true) {
-            throw new Error(
-                result.message ||
-                result.error ||
-                "Controller did not confirm the command."
-            );
-        }
-
-        console.log(
-            "Smart Light command successful:",
-            result
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "Controller request failed:",
-            error
-        );
-
-        const message =
-            error.name === "AbortError"
-                ? "Request timed out. Check the controller connection."
-                : "Unable to control Smart Light: " + error.message;
-
-        document.getElementById(
-            "light-message"
-        ).textContent = message;
-
-        return false;
-
-    } finally {
-
-        clearTimeout(timeout);
-
-    }
+async function request(path, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  try {
+    const response = await fetch(API_BASE + path, {...options, signal: controller.signal});
+    let data;
+    try { data = await response.json(); } catch (_) { throw new Error('Invalid JSON response'); }
+    if (!response.ok) throw new Error(data.message || data.error || 'HTTP ' + response.status);
+    return data;
+  } finally { clearTimeout(timer); }
 }
-
-
-/*
- * Change the state of a device.
- *
- * 1. Send the command.
- * 2. Wait for the result.
- * 3. Update the displayed state only if successful.
- * 4. Highlight the selected button.
- */
-async function setState(device, state, button) {
-
-    if (pendingDevices.has(device)) {
-        return;
-    }
-
-    pendingDevices.add(device);
-
-    const deviceSection = button.closest(".device");
-
-    const buttons =
-        deviceSection.querySelectorAll("button");
-
-    buttons.forEach(function(btn) {
-        btn.disabled = true;
+function showLightState(raw) {
+  const state = typeof raw === 'string' ? raw.toLowerCase() : 'unknown';
+  const labels = {on:'ON',off:'OFF',auto:'AUTO',on_manual:'ON (MANUAL)',off_manual:'OFF (MANUAL)',error:'ERROR',unknown:'UNKNOWN'};
+  $('light-status').textContent = labels[state] || state.toUpperCase();
+  document.querySelectorAll('[data-state]').forEach(button => {
+    const selected = (state === button.dataset.state) ||
+      (button.dataset.state === 'on' && state === 'on_manual') ||
+      (button.dataset.state === 'off' && state === 'off_manual');
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+}
+function showConnection(id, connected) {
+  const element = $(id);
+  element.textContent = connected ? 'ONLINE' : 'OFFLINE';
+  element.className = 'value ' + (connected ? 'ok' : 'bad');
+}
+async function setLight(state) {
+  if (commandPending) return;
+  commandPending = true;
+  $('light-message').textContent = '';
+  document.querySelectorAll('[data-state]').forEach(button => button.disabled = true);
+  try {
+    const result = await request('/control', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({node:LIGHT_NODE_ID,light:LIGHT_ID,state})
     });
-
-    if (device === "light") {
-        document.getElementById(
-            "light-message"
-        ).textContent = "";
-    }
-
-    try {
-
-        const success =
-            await sendCommand(device, state);
-
-        if (!success) {
-            return;
-        }
-
-        document.getElementById(
-            device + "-status"
-        ).textContent = state;
-
-        buttons.forEach(function(btn) {
-            btn.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        console.log(
-            device + " changed to " + state
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Unexpected control error:",
-            error
-        );
-
-        if (device === "light") {
-            document.getElementById(
-                "light-message"
-            ).textContent = error.message;
-        }
-
-    } finally {
-
-        pendingDevices.delete(device);
-
-        buttons.forEach(function(btn) {
-            btn.disabled = false;
-        });
-
-    }
+    if (result.success !== true) throw new Error(result.message || 'Controller did not confirm the command');
+    // This acknowledges a command, not proof of the resulting physical LED state.
+    $('light-message').textContent = 'Command accepted. Checking actual node status...';
+    await updateDeviceStatus();
+  } catch (error) {
+    $('light-message').textContent = error.name === 'AbortError' ? 'Command timed out. Check the controller connection.' : 'Unable to control light: ' + error.message;
+  } finally {
+    commandPending = false;
+    document.querySelectorAll('[data-state]').forEach(button => button.disabled = false);
+  }
 }
-
-
-/*
- * Retrieve controller status.
- *
- * This function is prepared for future status polling.
- * The exact response structure must be verified against
- * the controller firmware before updating device states.
- */
 async function updateDeviceStatus() {
-
-    const controller = new AbortController();
-
-    const timeout = setTimeout(() => {
-        controller.abort();
-    }, REQUEST_TIMEOUT);
-
-    try {
-
-        const response = await fetch(`${API_BASE}/status`, {
-            method: "GET",
-            signal: controller.signal
-        });
-
-        if (!response.ok) {
-            throw new Error(
-                "Status request failed: HTTP " + response.status
-            );
-        }
-
-        const status = await response.json();
-
-        console.log("Controller status:", status);
-
-        return status;
-
-    } catch (error) {
-
-        console.error(
-            "Unable to retrieve controller status:",
-            error
-        );
-
-        return null;
-
-    } finally {
-
-        clearTimeout(timeout);
-
-    }
+  if (statusPending) return;
+  statusPending = true;
+  try {
+    // /ping confirms controller availability; /status?node=1 checks only the Smart Light node.
+    const ping = await request('/ping');
+    const controllerOnline = ping.controller === 'online' && ping.wifiConnected === true;
+    showConnection('controller-status', controllerOnline);
+    $('controller-ip').textContent = ping.ip ? 'Controller IP: ' + ping.ip : '';
+    if (!controllerOnline) throw new Error('Controller Wi-Fi is disconnected');
+    const status = await request('/status?node=' + LIGHT_NODE_ID);
+    const node = Array.isArray(status.nodes) ? status.nodes.find(n => n.node === LIGHT_NODE_ID) : null;
+    showConnection('node-status', node?.online === true);
+    $('node-detail').textContent = node?.message || 'No status reported for Node 1';
+    showLightState(node?.online === true ? node.lightState : 'unknown');
+    $('last-updated').textContent = new Date().toLocaleTimeString();
+  } catch (error) {
+    showConnection('controller-status', false);
+    showConnection('node-status', false);
+    $('node-detail').textContent = error.name === 'AbortError' ? 'Status request timed out' : error.message;
+    showLightState('unknown');
+  } finally { statusPending = false; }
 }
-
-// Enable periodic status polling after the controller
-// response format and hardware behavior are verified.
-//
-// setInterval(updateDeviceStatus, 5000);
-
+updateDeviceStatus();
+setInterval(updateDeviceStatus, POLL_INTERVAL);
 </script>
-
 </body>
 </html>
