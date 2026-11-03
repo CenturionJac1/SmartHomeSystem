@@ -1,8 +1,9 @@
+
 #include "FSM.h"
 #include "Relay_Control.h"
 #include "Timer.h"
 #include "Sensor_Read.h"
-#include "Web_Server.h"
+#include "Node.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -17,64 +18,54 @@
 static const char *TAG = "main";
 
 void app_main(void) {
-    static httpd_handle_t server = NULL;
+
     static FSM fsm;
 
-    // Initialize hardware and control logic before connecting to Wi-Fi.
     Relay_Init();
     Timer_Init();
     Sensor_Init();
     initFSM(&fsm);
-    WebServer_Init(&fsm);
-
-    // Initialize NVS, recovering from specific storage errors.
+    ESP_ERROR_CHECK(Node_Init(&fsm));
     esp_err_t ret = nvs_flash_init();
 
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
         ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+
         ESP_ERROR_CHECK(nvs_flash_erase());
+
         ret = nvs_flash_init();
     }
 
     ESP_ERROR_CHECK(ret);
-
-    // Initialize networking.
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    // Connect using the credentials configured in menuconfig.
-    ESP_ERROR_CHECK(example_connect());
-
-    // Handle later disconnections and reconnections.
     ESP_ERROR_CHECK(esp_event_handler_register(
         IP_EVENT,
         IP_EVENT_STA_GOT_IP,
-        &connect_handler,
-        &server
+        Node_ConnectHandler,
+        NULL
     ));
 
     ESP_ERROR_CHECK(esp_event_handler_register(
         WIFI_EVENT,
         WIFI_EVENT_STA_DISCONNECTED,
-        &disconnect_handler,
-        &server
+        Node_DisconnectHandler,
+        NULL
     ));
 
-    // Start the server for the initial connection.
-    server = start_webserver();
-
-    if (server == NULL) {
-        ESP_LOGE(TAG, "Web server failed to start");
-    }
-
+    ESP_LOGI(TAG, "Connecting to Wi-Fi...");
+    ESP_ERROR_CHECK(example_connect());
+    ESP_LOGI(TAG, "Wi-Fi connection established");
+    ESP_ERROR_CHECK(Node_StartServer());
     bool previous_motion = false;
     bool first_read = true;
 
     while (1) {
-        bool motion = Sensor_IsMotionDetected();
 
-        // Log only the first reading and changes in sensor output.
+        bool motion = Sensor_IsMotionDetected();
         if (first_read || motion != previous_motion) {
+
             ESP_LOGI(
                 TAG,
                 "PIR: %s",
@@ -84,8 +75,7 @@ void app_main(void) {
             previous_motion = motion;
             first_read = false;
         }
-
-        stateFSM(&fsm);
+        Node_RunFSM();
 
         vTaskDelay(pdMS_TO_TICKS(100));
     }
