@@ -1,184 +1,994 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Smart Home Lighting Dashboard</title>
+
+<title>My Smart Home</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f5f9;color:#1f2937;font-family:Arial,sans-serif}
-header{padding:26px 12px;background:#1f2937;color:white;text-align:center}
-header h1{margin:0 0 8px;font-size:26px}
-header p{margin:0;color:#d1d5db}
-main{max-width:780px;margin:26px auto;padding:0 18px}
-.card{background:white;border-radius:12px;padding:23px;margin-bottom:17px;box-shadow:0 2px 9px #00000010}
-h2{margin:0 0 18px;font-size:20px}
-.controls{display:flex;gap:9px;flex-wrap:wrap}
-button{padding:11px 22px;border:0;border-radius:7px;cursor:pointer;font-size:15px}
-button.active{background:#2563eb;color:white}
-button:disabled{opacity:.5}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
-.value{font-size:20px;font-weight:bold}
-.note{font-size:13px;color:#6b7280;line-height:1.5}
-#message{min-height:20px;font-size:14px}
-@media(max-width:580px){.grid{grid-template-columns:1fr}}
+:root {
+  --background: #f5f7fb;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #7b8494;
+  --border: #e8edf4;
+  --primary: #2563eb;
+  --green: #22a06b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Arial, sans-serif;
+}
+
+/* HEADER */
+
+header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 25px 20px;
+}
+
+.header-inner {
+  max-width: 850px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 27px;
+  letter-spacing: -0.6px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.connection-dot {
+  width: 9px;
+  height: 9px;
+  background: #9ca3af;
+  border-radius: 50%;
+}
+
+.connection-dot.online {
+  background: #22c55e;
+}
+
+.connection-dot.offline {
+  background: #ef4444;
+}
+
+#connection {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 13px;
+}
+
+#connection.online {
+  color: #15803d;
+}
+
+#connection.offline {
+  color: #b91c1c;
+}
+
+/* MAIN */
+
+main {
+  max-width: 850px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 24px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.025);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 23px;
+}
+
+.icon {
+  width: 47px;
+  height: 47px;
+  border-radius: 13px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.icon.purple {
+  background: #f5f3ff;
+}
+
+.icon.green {
+  background: #ecfdf5;
+}
+
+.card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title h2 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.card-title p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* LIGHT */
+
+.pill {
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.light-output {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.light-output span:first-child {
+  color: var(--muted);
+}
+
+#light {
+  font-weight: 650;
+}
+
+.controls {
+  display: flex;
+  gap: 6px;
+}
+
+.light-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #f1f5f9;
+  padding: 5px;
+  border-radius: 11px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s ease,
+    color .15s ease;
+}
+
+.light-controls button {
+  border: 0;
+  background: transparent;
+  padding: 12px 10px;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.light-controls button.active {
+  background: white;
+  color: var(--primary);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+
+.light-controls button:hover:not(:disabled):not(.active) {
+  background: #e2e8f0;
+}
+
+.motion-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 22px;
+  padding-top: 19px;
+  font-size: 14px;
+}
+
+.motion-label {
+  color: var(--muted);
+}
+
+#motion {
+  font-weight: 600;
+  text-align: right;
+}
+
+/* OUTLET / HUMIDIFIER */
+
+.device-status {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.device-status strong {
+  color: var(--text);
+}
+
+.device-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.device-controls button {
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.device-controls button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.device-controls button:hover:not(:disabled):not(.active) {
+  background: #e2e8f0;
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* SOIL MOISTURE */
+
+.moisture-value {
+  font-size: 29px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.progress {
+  width: 100%;
+  height: 11px;
+  background: #e9eef4;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--green);
+  border-radius: 20px;
+  transition: width .35s ease;
+}
+
+.moisture-description {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* MESSAGES */
+
+.message {
+  min-height: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.message:not(:empty) {
+  margin-top: 14px;
+}
+
+/* Hidden technical information.
+   Elements remain available to existing JS. */
+
+.technical {
+  display: none;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 23px;
+  }
+
+  .header-inner {
+    gap: 10px;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>Smart Home Lighting Dashboard</h1>
-<p>ESP32-S3 Lighting Control &amp; Monitoring</p>
+  <div class="header-inner">
+
+    <div>
+      <h1>My Smart Home</h1>
+      <p class="subtitle">Home controls</p>
+    </div>
+
+    <div class="connection">
+      <span id="connectionDot"
+            class="connection-dot"></span>
+      <span id="connection">CHECKING...</span>
+    </div>
+
+  </div>
 </header>
 
 <main>
-<section class="card">
-<h2>Smart Light</h2>
-<p>Output command: <strong id="light">UNKNOWN</strong></p>
-<p>Mode: <strong id="mode">UNKNOWN</strong></p>
-<div class="controls">
-<button data-mode="off" onclick="setLight('off')">OFF</button>
-<button data-mode="on" onclick="setLight('on')">ON</button>
-<button data-mode="auto" onclick="setLight('auto')">AUTO</button>
-</div>
-<p id="message" role="status" aria-live="polite"></p>
-<p class="note">
-Output reflects firmware state, not independent confirmation of the physical light.
-</p>
-</section>
 
 <div class="grid">
-<section class="card">
-<h2>ESP32-S3 Connection</h2>
-<div id="connection" class="value">CHECKING...</div>
-<p id="address" class="note"></p>
-</section>
 
-<section class="card">
-<h2>Motion Sensor</h2>
-<div id="motion" class="value">UNKNOWN</div>
-<p class="note">Shows the PIR output, not continuous occupancy.</p>
-</section>
+  <!-- SMART LIGHT -->
 
-<section class="card">
-<h2>Sensor Initialization</h2>
-<div id="sensor" class="value">UNKNOWN</div>
-<p class="note">This does not detect disconnected or faulty sensor wiring.</p>
-</section>
+  <section class="card full">
 
-<section class="card">
-<h2>Last Status Update</h2>
-<div id="updated" class="value">NEVER</div>
-<p class="note">Refreshes every 2 seconds.</p>
-</section>
+    <div class="card-header">
+
+      <div class="icon">💡</div>
+
+      <div class="card-title">
+        <h2>Smart Light</h2>
+        <p>Lighting control</p>
+      </div>
+
+      <span id="lightModeBadge" class="pill">
+        Unknown
+      </span>
+
+    </div>
+
+    <div class="light-output">
+      <span>Light status</span>
+      <strong id="light">UNKNOWN</strong>
+    </div>
+
+    <div class="controls light-controls">
+
+      <button data-mode="off">
+        Off
+      </button>
+
+      <button data-mode="on">
+        On
+      </button>
+
+      <button data-mode="auto">
+        Auto
+      </button>
+
+    </div>
+
+    <div class="motion-row">
+      <span class="motion-label">
+        Motion sensor
+      </span>
+
+      <span id="motion">
+        UNKNOWN
+      </span>
+    </div>
+
+    <p id="lightMessage"
+       class="message"
+       role="status"
+       aria-live="polite"></p>
+
+  </section>
+
+  <!-- SMART OUTLET -->
+
+  <section class="card">
+
+    <div class="card-header">
+
+      <div class="icon">🔌</div>
+
+      <div class="card-title">
+        <h2>Smart Outlet</h2>
+        <p>Power control</p>
+      </div>
+
+    </div>
+
+    <div class="device-status">
+      Status:
+      <strong id="outlet">UNKNOWN</strong>
+    </div>
+
+    <div class="controls device-controls">
+
+      <button data-device="outlet"
+              data-state="on">
+        On
+      </button>
+
+      <button data-device="outlet"
+              data-state="off">
+        Off
+      </button>
+
+    </div>
+
+    <p id="outletMessage"
+       class="message"
+       role="status"></p>
+
+  </section>
+
+  <!-- HUMIDIFIER -->
+
+  <section class="card">
+
+    <div class="card-header">
+
+      <div class="icon purple">💧</div>
+
+      <div class="card-title">
+        <h2>Humidifier</h2>
+        <p>Humidity control</p>
+      </div>
+
+    </div>
+
+    <div class="device-status">
+      Status:
+      <strong id="humidifier">UNKNOWN</strong>
+    </div>
+
+    <div class="controls device-controls">
+
+      <button data-device="humidifier"
+              data-state="on">
+        On
+      </button>
+
+      <button data-device="humidifier"
+              data-state="off">
+        Off
+      </button>
+
+    </div>
+
+    <p id="humidifierMessage"
+       class="message"
+       role="status"></p>
+
+  </section>
+
+  <!-- PLANT MONITOR -->
+
+  <section class="card full">
+
+    <div class="card-header">
+
+      <div class="icon green">🌱</div>
+
+      <div class="card-title">
+        <h2>Plant Monitor</h2>
+        <p>Soil moisture</p>
+      </div>
+
+      <div id="soil" class="moisture-value">
+        UNKNOWN
+      </div>
+
+    </div>
+
+    <div class="progress">
+      <div id="soilBar"
+           class="progress-fill"></div>
+    </div>
+
+    <p id="soilCondition"
+       class="moisture-description">
+      Waiting for sensor data.
+    </p>
+
+  </section>
+
 </div>
+
+<!-- Hidden technical status elements.
+     Retained for JavaScript compatibility. -->
+
+<div class="technical" aria-hidden="true">
+  <span id="mode">UNKNOWN</span>
+  <span id="sensor">UNKNOWN</span>
+  <span id="address"></span>
+  <span id="httpStatus">UNKNOWN</span>
+  <span id="updated">NEVER</span>
+  <span id="apiStatus">UNKNOWN</span>
+  <span id="systemMessage"></span>
+</div>
+
 </main>
 
 <script>
 'use strict';
 
 const $ = id => document.getElementById(id);
+
+const POLL_INTERVAL = 2000;
+const REQUEST_TIMEOUT = 5000;
+
 let commandPending = false;
 let statusPending = false;
+let connected = false;
+
+const supported = {
+  light: false,
+  outlet: false,
+  humidifier: false
+};
+
+function hasOwn(object, key) {
+  return Object.prototype.hasOwnProperty.call(object, key);
+}
+
+function readBoolean(value) {
+  if (value === true || value === 1 ||
+      value === 'on' || value === 'ON') {
+    return true;
+  }
+
+  if (value === false || value === 0 ||
+      value === 'off' || value === 'OFF') {
+    return false;
+  }
+
+  return null;
+}
+
+function stateText(value) {
+  const state = readBoolean(value);
+
+  if (state === null) return 'UNKNOWN';
+  return state ? 'ON' : 'OFF';
+}
 
 async function request(path, options = {}) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 5000);
+  const controller = new AbortController();
 
-    try {
-        const response = await fetch(path, {
-            ...options,
-            cache: 'no-store',
-            signal: controller.signal
-        });
+  const timer = setTimeout(
+    () => controller.abort(),
+    REQUEST_TIMEOUT
+  );
 
-        const data = await response.json();
+  try {
+    const response = await fetch(path, {
+      ...options,
+      cache: 'no-store',
+      signal: controller.signal
+    });
 
-        if (!response.ok) {
-            throw new Error(data.error || `HTTP ${response.status}`);
-        }
+    const data = await response.json();
 
-        return data;
-    } finally {
-        clearTimeout(timer);
+    if (!response.ok) {
+      throw new Error(
+        data.error || `HTTP ${response.status}`
+      );
     }
+
+    return data;
+
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timed out');
+    }
+
+    throw error;
+
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function updateButtons() {
+  document.querySelectorAll('[data-mode]').forEach(button => {
+    button.disabled =
+      !connected || !supported.light || commandPending;
+  });
+
+  document.querySelectorAll('[data-device]').forEach(button => {
+    const device = button.dataset.device;
+
+    button.disabled =
+      !connected || !supported[device] || commandPending;
+  });
+}
+
+function updateActiveButtons() {
+  const mode = $('mode').textContent.toLowerCase();
+
+  document.querySelectorAll('[data-mode]').forEach(button => {
+    const active = button.dataset.mode === mode;
+
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+
+  ['outlet', 'humidifier'].forEach(device => {
+    const state = $(device).textContent.toLowerCase();
+
+    document.querySelectorAll(
+      `[data-device="${device}"]`
+    ).forEach(button => {
+      const active =
+        state !== 'unknown' &&
+        button.dataset.state === state;
+
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+  });
+
+  // Update the user-facing light mode badge.
+  const badge = $('lightModeBadge');
+
+  badge.textContent =
+    mode === 'unknown' ? 'Unknown' : mode.toUpperCase();
+
+  badge.style.background =
+    mode === 'auto' ? '#dbeafe' :
+    mode === 'on' ? '#dcfce7' : '#f1f5f9';
+
+  badge.style.color =
+    mode === 'auto' ? '#1d4ed8' :
+    mode === 'on' ? '#15803d' : '#64748b';
+}
+
+function updateConnectionIndicator() {
+  const dot = $('connectionDot');
+
+  dot.className = 'connection-dot ' +
+    (connected ? 'online' : 'offline');
+}
+
+function updateLight(data) {
+  const light = data.light &&
+                typeof data.light === 'object'
+    ? data.light
+    : data;
+
+  supported.light = false;
+
+  const mode = light.mode;
+  const output = light.output;
+
+  if (typeof mode !== 'string' ||
+      !['on', 'off', 'auto'].includes(mode.toLowerCase()) ||
+      output === undefined) {
+    $('mode').textContent = 'UNKNOWN';
+    $('light').textContent = 'UNKNOWN';
+    return;
+  }
+
+  $('mode').textContent = mode.toUpperCase();
+  $('light').textContent = stateText(output);
+
+  supported.light = true;
+
+  const motion = readBoolean(light.motion);
+
+  $('motion').textContent =
+    light.sensorError === true ? 'UNAVAILABLE' :
+    motion === true ? 'MOTION DETECTED' :
+    motion === false ? 'NO MOTION' :
+    'NOT REPORTED';
+
+  $('sensor').textContent =
+    light.sensorError === true ? 'ERROR' :
+    light.sensorError === false ? 'READY' :
+    'NOT REPORTED';
+}
+
+function updateRelay(data, device) {
+  const item = data[device];
+
+  supported[device] = false;
+  $(device).textContent = 'NOT AVAILABLE';
+
+  if (!item || typeof item !== 'object') return;
+
+  const state = readBoolean(
+    item.on ?? item.output ?? item.state
+  );
+
+  if (state === null) return;
+
+  $(device).textContent = state ? 'ON' : 'OFF';
+  supported[device] = true;
+}
+
+function updateSoil(data) {
+  const soil = data.soil;
+
+  if (!soil || typeof soil !== 'object') {
+    $('soil').textContent = 'NOT AVAILABLE';
+    $('soilBar').style.width = '0%';
+    $('soilCondition').textContent =
+      'Sensor data unavailable';
+    return;
+  }
+
+  const value = soil.moisture ?? soil.percent;
+  const moisture = Number(value);
+
+  if (value === undefined || value === null ||
+      !Number.isFinite(moisture) ||
+      moisture < 0 || moisture > 100) {
+    $('soil').textContent = 'UNAVAILABLE';
+    $('soilBar').style.width = '0%';
+    $('soilCondition').textContent =
+      'Moisture reading unavailable';
+    return;
+  }
+
+  $('soil').textContent = moisture.toFixed(1) + '%';
+  $('soilBar').style.width = moisture + '%';
+
+  $('soilCondition').textContent =
+    'Current soil moisture';
+}
+
+function setOffline(message) {
+  connected = false;
+
+  Object.keys(supported).forEach(device => {
+    supported[device] = false;
+  });
+
+  $('connection').textContent = 'Disconnected';
+  $('connection').className = 'offline';
+
+  $('httpStatus').textContent = 'OFFLINE';
+
+  $('light').textContent = 'UNKNOWN';
+  $('mode').textContent = 'UNKNOWN';
+  $('motion').textContent = 'UNKNOWN';
+  $('sensor').textContent = 'UNKNOWN';
+
+  $('outlet').textContent = 'UNKNOWN';
+  $('humidifier').textContent = 'UNKNOWN';
+
+  $('soil').textContent = 'UNKNOWN';
+  $('soilBar').style.width = '0%';
+  $('soilCondition').textContent = 'No sensor data';
+
+  $('apiStatus').textContent = 'UNAVAILABLE';
+  $('systemMessage').textContent = message;
+
+  updateConnectionIndicator();
+  updateActiveButtons();
+  updateButtons();
 }
 
 async function updateStatus() {
-    if (statusPending) return;
-    statusPending = true;
+  if (statusPending || commandPending) return;
 
-    try {
-        const data = await request('/status');
+  statusPending = true;
 
-        $('connection').textContent = 'ONLINE';
-        $('address').textContent = 'Board address: ' + location.host;
-        $('light').textContent = data.output;
-        $('mode').textContent = data.mode.toUpperCase();
-        $('motion').textContent = data.sensorError
-            ? 'UNAVAILABLE'
-            : data.motion ? 'MOTION DETECTED' : 'NO MOTION';
-        $('sensor').textContent = data.sensorError ? 'ERROR' : 'READY';
-        $('updated').textContent = new Date().toLocaleTimeString();
+  try {
+    const data = await request('/status');
 
-        document.querySelectorAll('[data-mode]').forEach(button => {
-            const selected = button.dataset.mode === data.mode;
-            button.classList.toggle('active', selected);
-            button.setAttribute('aria-pressed', String(selected));
-        });
-    } catch (error) {
-        $('connection').textContent = 'UNREACHABLE';
-        $('light').textContent = 'UNKNOWN';
-        $('mode').textContent = 'UNKNOWN';
-        $('motion').textContent = 'UNKNOWN';
-        $('sensor').textContent = 'UNKNOWN';
-
-        document.querySelectorAll('[data-mode]').forEach(button => {
-            button.classList.remove('active');
-            button.setAttribute('aria-pressed', 'false');
-        });
-    } finally {
-        statusPending = false;
+    if (!data || typeof data !== 'object' ||
+        Array.isArray(data)) {
+      throw new Error('Invalid API response');
     }
+
+    const light = data.light &&
+                  typeof data.light === 'object'
+      ? data.light
+      : data;
+
+    if (typeof light.mode !== 'string' ||
+        light.output === undefined) {
+      throw new Error('Unsupported status format');
+    }
+
+    connected = true;
+
+    $('connection').textContent = 'Connected';
+    $('connection').className = 'online';
+
+    updateConnectionIndicator();
+
+    $('address').textContent =
+      'Board address: ' + location.host;
+
+    $('httpStatus').textContent = 'ONLINE';
+
+    $('updated').textContent =
+      new Date().toLocaleTimeString();
+
+    $('apiStatus').textContent =
+      hasOwn(data, 'light')
+        ? 'Unified API'
+        : 'Existing Light API';
+
+    $('systemMessage').textContent = '';
+
+    updateLight(data);
+    updateRelay(data, 'outlet');
+    updateRelay(data, 'humidifier');
+    updateSoil(data);
+
+    updateActiveButtons();
+
+  } catch (error) {
+    setOffline(error.message);
+
+  } finally {
+    statusPending = false;
+    updateButtons();
+  }
 }
 
-async function setLight(state) {
-    if (commandPending) return;
-    commandPending = true;
+async function sendCommand(device, state) {
+  if (commandPending || !connected || !supported[device]) {
+    return;
+  }
 
-    document.querySelectorAll('button').forEach(button => {
-        button.disabled = true;
-    });
+  commandPending = true;
+  updateButtons();
 
-    $('message').textContent = 'Sending command...';
+  const messageId =
+    device === 'light'
+      ? 'lightMessage'
+      : device + 'Message';
 
-    try {
-        const result = await request('/control', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({cmd: state}).toString()
-        });
+  $(messageId).textContent = 'Updating...';
 
-        if (!result.success) {
-            throw new Error('Command was not accepted');
-        }
+  try {
+    let options;
 
-        $('message').textContent = 'Command accepted.';
-        await updateStatus();
-    } catch (error) {
-        $('message').textContent =
-            'Command failed or was not confirmed. Check board status.';
-    } finally {
-        commandPending = false;
-        document.querySelectorAll('button').forEach(button => {
-            button.disabled = false;
-        });
+    if (device === 'light') {
+      // Existing ESP32 light API.
+      options = {
+        method: 'POST',
+        headers: {
+          'Content-Type':
+            'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          cmd: state
+        }).toString()
+      };
+
+    } else {
+      // Proposed API for additional devices.
+      options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          device: device,
+          state: state
+        })
+      };
     }
+
+    const result = await request('/control', options);
+
+    if (result.success !== true) {
+      throw new Error(
+        result.error || 'Command not accepted'
+      );
+    }
+
+    $(messageId).textContent = 'Command accepted.';
+
+  } catch (error) {
+    $(messageId).textContent =
+      'Could not update device.';
+
+  } finally {
+    commandPending = false;
+    updateButtons();
+    await updateStatus();
+  }
 }
 
+document.querySelectorAll('[data-mode]').forEach(button => {
+  button.addEventListener('click', () => {
+    sendCommand('light', button.dataset.mode);
+  });
+});
+
+document.querySelectorAll('[data-device]').forEach(button => {
+  button.addEventListener('click', () => {
+    sendCommand(
+      button.dataset.device,
+      button.dataset.state
+    );
+  });
+});
+
+updateButtons();
 updateStatus();
-setInterval(updateStatus, 2000);
+
+setInterval(updateStatus, POLL_INTERVAL);
+
 </script>
+
 </body>
 </html>
