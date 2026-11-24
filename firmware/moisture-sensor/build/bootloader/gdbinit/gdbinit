@@ -1,0 +1,2 @@
+source /Users/minjukim/Desktop/SmartHomeSystem/firmware/moisture-sensor/build/bootloader/gdbinit/symbols
+source /Users/minjukim/Desktop/SmartHomeSystem/firmware/moisture-sensor/build/bootloader/gdbinit/connect
