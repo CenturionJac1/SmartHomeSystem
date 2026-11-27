@@ -1,7 +1,7 @@
-//This is where all configurations that are NOT secret are kept for the firmware. for example:
+#pragma once
 
-//GPIO assignments
+#include "driver/gpio.h"
 
-//Network settings (NOT PASSWORDS)
-
-//Device Behavior (defaults)
+#define OUTLET_GPIO GPIO_NUM_5
+#define OUTLET_ACTIVE_LEVEL 1
+#define OUTLET_MAX_SECONDS 3600
